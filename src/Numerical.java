@@ -18,7 +18,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import net.miginfocom.swing.MigLayout;
 
-public class MultipleChoice extends JPanel {
+public class Numerical extends JPanel {
 
 	
 	private JPanel panel, labelPanel, txtPanel;
@@ -35,7 +35,7 @@ public class MultipleChoice extends JPanel {
 
 	
 
-	public MultipleChoice() {
+	public Numerical() {
 		
 		
 		setLayout(new MigLayout("", "[right][grow,fill][grow,fill]", "[][grow][][]"));
@@ -118,7 +118,7 @@ public class MultipleChoice extends JPanel {
 //										setzero(mark4) + "%"+ choise4+"\n}" + "\n");
 						out.close();
 								
-						rowList.get(i).getSpn().setValue(0);
+						rowList.get(i).getSpn2().setValue(0);
 															
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -157,40 +157,74 @@ public class MultipleChoice extends JPanel {
 		
 	private class Row extends JPanel {
 		
-		private SpinnerModel spnModel;
-		private JSpinner spn;
-		private JTextField txt = new JTextField();
+		private SpinnerModel spn1Model, spn2Model;
+		private JSpinner spn1,spn2;
+		private JTextField txt1,txt2;
 		
 		
 		public Row(String row){
+					
+			spn1Model = new SpinnerNumberModel(0, 0, 100, 5);
+			spn1 = new JSpinner(spn1Model);
+			spn2Model = new SpinnerNumberModel(0, 0, 100, 5);
+			spn2 = new JSpinner(spn2Model);
+			txt1 = new JTextField();
+			txt2 = new JTextField();
 			
-			setLayout(new MigLayout("", "[][grow][][]","[]"));
-			
-			spnModel = new SpinnerNumberModel(0, 0, 100, 5);
-			spn = new JSpinner(spnModel);
+			setLayout(new MigLayout("", "[][grow][][][][grow][][]","[]"));
 			
 			add(new JLabel(row));
-			add(txt,"growx");
+			add(txt1,"growx");
+			add(new JLabel("Tolerance +/-"));
+			add(spn1,"growx");
+			
+			add(new JLabel("Feedback (Optional)"));
+			add(txt2,"growx");
 			add(new JLabel("%"));
-			add(spn,"growx");
+			add(spn2,"growx");
 			
 		}
 
-		public JTextField getTxt() {
-			return txt;
+
+		public JSpinner getSpn1() {
+			return spn1;
 		}
 
-		public void setTxt(JTextField txt) {
-			this.txt = txt;
+
+		public void setSpn1(JSpinner spn1) {
+			this.spn1 = spn1;
 		}
 
-		public JSpinner getSpn() {
-			return spn;
+
+		public JSpinner getSpn2() {
+			return spn2;
 		}
 
-		public void setSpn(JSpinner spn) {
-			this.spn = spn;
+
+		public void setSpn2(JSpinner spn2) {
+			this.spn2 = spn2;
 		}
+
+
+		public JTextField getTxt1() {
+			return txt1;
+		}
+
+
+		public void setTxt1(JTextField txt1) {
+			this.txt1 = txt1;
+		}
+
+
+		public JTextField getTxt2() {
+			return txt2;
+		}
+
+
+		public void setTxt2(JTextField txt2) {
+			this.txt2 = txt2;
+		}
+			
 	}
 
 }

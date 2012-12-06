@@ -1,105 +1,161 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 
 public class Matching extends JPanel {
+	
+	private JPanel panel;
+	private JScrollPane scrText, scrPanel;
+	private JTextField textField;;
 
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-
+	private ArrayList<Row> rowList = new ArrayList<Row>();
+	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+	int i=0;
 
 	public Matching() {
 		
-		setLayout(new MigLayout("", "[][269.00,grow][57.00,center][]", "[][173.00,grow][92.00,grow][]"));
+		setLayout(new MigLayout("", "[right][grow,fill][grow,fill]", "[][grow][][]"));
 		
-		JLabel lblNewLabel = new JLabel("Quistion Titil (optional)");
-		add(lblNewLabel, "cell 0 0,alignx trailing");
+		JLabel lblTitle = new JLabel("Question Title (optional)");
+		add(lblTitle);
 		
 		textField = new JTextField();
-		add(textField, "cell 1 0 3 1,growx");
-		textField.setColumns(10);
+		add(textField, "spanx, growx, wrap");
 		
-		JLabel lblQuistion = new JLabel("Quistion");
-		add(lblQuistion, "cell 0 1,alignx right,aligny top");
+		JLabel lblQuestion = new JLabel("Question");
+		add(lblQuestion,"alignx right,aligny top");
 		
 		JTextArea textArea = new JTextArea();
-		add(textArea, "cell 1 1 3 1,grow");
+		scrText = new JScrollPane(textArea);
+		add(scrText, "spanx, grow, wrap");
 		
-		JPanel panel = new JPanel();
-		add(panel, "cell 1 2 3 1,grow");
-		panel.setLayout(new MigLayout("", "[][227.00,grow][15.00,grow][142.00,grow][]", "[][][][]"));
+		panel = new JPanel();
+		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+
+		scrPanel = new JScrollPane(panel);
+		add(scrPanel, "skip 1, spanx, grow, wrap");
 		
-		JLabel lblA = new JLabel("A");
-		panel.add(lblA, "cell 0 0,alignx trailing");
 		
-		textField_1 = new JTextField();
-		panel.add(textField_1, "cell 1 0,growx");
-		textField_1.setColumns(10);
+		rowList.add(new Row(letters[i]));
 		
-		JLabel lblA_1 = new JLabel("A");
-		panel.add(lblA_1, "cell 2 0,alignx center");
+		panel.add(rowList.get(i),"growx, wrap");
 		
-		textField_4 = new JTextField();
-		panel.add(textField_4, "cell 3 0,growx");
-		textField_4.setColumns(10);
+		JButton saveAnswer = new JButton("Save & Add Question");
+		add(saveAnswer);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Delete");
-		panel.add(chckbxNewCheckBox, "cell 4 0");
+		JButton btnAdd = new JButton("Add");
+		add(btnAdd);
 		
-		JLabel lblB = new JLabel("B");
-		panel.add(lblB, "cell 0 1,alignx trailing");
+		JButton btnDel = new JButton("Delete");
+		add(btnDel);
 		
-		textField_2 = new JTextField();
-		panel.add(textField_2, "cell 1 1,growx");
-		textField_2.setColumns(10);
 		
-		JLabel lblB_1 = new JLabel("B");
-		panel.add(lblB_1, "cell 2 1,alignx center");
 		
-		textField_5 = new JTextField();
-		panel.add(textField_5, "cell 3 1,growx");
-		textField_5.setColumns(10);
+		btnAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				buildMatch(++i);
+				scrPanel.updateUI();
+			}
+		});
 		
-		JCheckBox chckbxDelete = new JCheckBox("Delete");
-		panel.add(chckbxDelete, "cell 4 1");
-		
-		JLabel lblC = new JLabel("C");
-		panel.add(lblC, "cell 0 2,alignx trailing");
-		
-		textField_3 = new JTextField();
-		panel.add(textField_3, "cell 1 2,growx");
-		textField_3.setColumns(10);
-		
-		JLabel lblC_1 = new JLabel("C");
-		panel.add(lblC_1, "cell 2 2,alignx center");
-		
-		textField_6 = new JTextField();
-		panel.add(textField_6, "cell 3 2,growx");
-		textField_6.setColumns(10);
-		
-		JCheckBox chckbxDelete_1 = new JCheckBox("Delete");
-		panel.add(chckbxDelete_1, "cell 4 2");
-		
-		JButton btnNewButton = new JButton("Add Matching");
-		add(btnNewButton, "cell 2 3");
-		
-		JButton btnNewButton_1 = new JButton("Delete checked");
-		add(btnNewButton_1, "cell 3 3");
+		btnDel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if(i>0)
+				{
+					removeMatch(i--);
+					scrPanel.updateUI();
+				}
+				else
+					JOptionPane.showMessageDialog(null, "You must have at least one Match");
+			}
+		});
 	}
 
+
+	protected void buildMatch(int i) {
+		
+		rowList.add(new Row(letters[i]));
+		
+		for (int x = 0; x <= i; x++) {
+			
+			panel.add(rowList.get(x),"growx, wrap");
+		}	
+	}
+
+	protected void removeMatch(int i) {
+				
+		panel.remove(rowList.get(i));
+	
+	}
+
+	private class Row extends JPanel {
+		
+		private JLabel lab1, lab2;
+		private JTextField txt1, txt2;
+		
+		public Row(String row){
+			
+			setLayout(new MigLayout("", "[][grow][][grow]","[]"));
+
+			add(new JLabel(row));
+			add(new JTextField(),"growx");
+
+			add(new JLabel(row));
+			add(new JTextField(),"growx");
+			
+				
+		}
+
+		public JLabel getLab1() {
+			return lab1;
+		}
+
+		public void setLab1(JLabel lab1) {
+			this.lab1 = lab1;
+		}
+
+		public JLabel getLab2() {
+			return lab2;
+		}
+
+		public void setLab2(JLabel lab2) {
+			this.lab2 = lab2;
+		}
+
+		public JTextField getTxt1() {
+			return txt1;
+		}
+
+		public void setTxt1(JTextField txt1) {
+			this.txt1 = txt1;
+		}
+
+		public JTextField getTxt2() {
+			return txt2;
+		}
+
+		public void setTxt2(JTextField txt2) {
+			this.txt2 = txt2;
+		}
+		
+	}
 }
+
