@@ -114,7 +114,7 @@ public class MissingWord extends JPanel {
 
 					}
 					out.append("=" + rowList.get(rowList.size()-1).getTxt().getText());
-					out.append("}\n");
+					out.append("}\n\n");
 					out.close();	
 					
 

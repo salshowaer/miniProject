@@ -22,7 +22,7 @@ import javax.swing.JTabbedPane;
 		tab.add("Missing Word", new MissingWord());
 		tab.add("Essay", new Essay());
 		tab.add("Numerical",new Numerical());
-		tab.add("Number Range",new MathRange());
+		tab.add("Number Range",new NumberRange());
 		
 		add(tab);
 				

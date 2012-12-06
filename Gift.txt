@@ -1,7 +1,5 @@
-::Q7::
-choose animal.{
-~%40%cat
-~%45%rabit
-~chair
-~knife
-}
+::Q9::
+What year was UCLA founded in?{#
+=1919:0
+=%50%1919:2}
+

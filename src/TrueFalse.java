@@ -65,7 +65,7 @@ public class TrueFalse extends JPanel {
 				try {
 					
 					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));					
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n");
+					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n\n");
 					out.close();
 										
 				} catch (IOException e) {

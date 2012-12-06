@@ -122,7 +122,7 @@ public class MultipleChoice extends JPanel {
 								out.append("~" + rowList.get(i).getTxt().getText() + "\n");
 
 						}
-						out.append("}\n");
+						out.append("}\n\n");
 						out.close();
 								
 															

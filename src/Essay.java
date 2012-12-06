@@ -51,7 +51,7 @@ public class Essay extends JPanel {
 				try {
 					
 					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));					
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {}" + "\n");
+					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {}" + "\n\n");
 					out.close();
 					
 				} catch (IOException e) {

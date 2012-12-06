@@ -112,7 +112,7 @@ public class Matching extends JPanel {
 
 					}
 					
-					out.append("}\n");
+					out.append("}\n\n");
 					out.close();	
 					
 
