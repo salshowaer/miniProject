@@ -1,5 +1,10 @@
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -16,13 +21,16 @@ import net.miginfocom.swing.MigLayout;
 public class Matching extends JPanel {
 	
 	private JPanel panel;
-	private JScrollPane scrText, scrPanel;
-	private JTextField textField;;
+	private JScrollPane scrPanel;
+	private JTextField txtTitle;
+	private TextArea txtBody;
+	private static PrintWriter out;
 
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	int i=0;
+	
 
 	public Matching() {
 		
@@ -31,15 +39,14 @@ public class Matching extends JPanel {
 		JLabel lblTitle = new JLabel("Question Title (optional)");
 		add(lblTitle);
 		
-		textField = new JTextField();
-		add(textField, "spanx, growx, wrap");
+		txtTitle = new JTextField();
+		add(txtTitle, "spanx, growx, wrap");
 		
 		JLabel lblQuestion = new JLabel("Question");
 		add(lblQuestion,"alignx right,aligny top");
 		
-		JTextArea textArea = new JTextArea();
-		scrText = new JScrollPane(textArea);
-		add(scrText, "spanx, grow, wrap");
+		txtBody = new TextArea();
+		add(txtBody, "spanx, grow, wrap");
 		
 		panel = new JPanel();
 		panel.setLayout(new MigLayout("", "[grow]", "[]"));
@@ -87,6 +94,46 @@ public class Matching extends JPanel {
 					JOptionPane.showMessageDialog(null, "You must have at least one Match");
 			}
 		});
+		
+		saveAnswer.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+
+				try {
+					
+					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
+					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {\n");
+					
+					for (int i = 0; i < rowList.size(); i++) {
+						
+						out.append("=" + rowList.get(i).getTxt1().getText() + " -> " + rowList.get(i).getTxt2().getText() + "\n");
+
+					}
+					
+					out.append("}\n");
+					out.close();	
+					
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					
+					} finally {
+						
+						JOptionPane.showMessageDialog(null, "Question has been saved");
+						txtTitle.setText("");
+						txtBody.setText("");
+						
+						for (int i = 0; i < rowList.size(); i++) {
+														
+							rowList.get(i).getTxt1().setText("");
+							rowList.get(i).getTxt2().setText("");
+						}
+					}
+
+				}
+			});
 	}
 
 
@@ -108,49 +155,43 @@ public class Matching extends JPanel {
 
 	private class Row extends JPanel {
 		
-		private JLabel lab1, lab2;
-		private JTextField txt1, txt2;
+		private JTextField txt1;
+		private JTextField txt2;
+		private String row;
 		
-		public Row(String row){
+
+		public Row(String arow) {
+			
+			super();
+			this.row = arow;
 			
 			setLayout(new MigLayout("", "[][grow][][grow]","[]"));
 
-			add(new JLabel(row));
-			add(new JTextField(),"growx");
-
-			add(new JLabel(row));
-			add(new JTextField(),"growx");
+			txt1 = new JTextField();
+			txt2 = new JTextField();
 			
-				
-		}
+			add(new JLabel(row));
+			add(txt1,"growx");
 
-		public JLabel getLab1() {
-			return lab1;
-		}
-
-		public void setLab1(JLabel lab1) {
-			this.lab1 = lab1;
-		}
-
-		public JLabel getLab2() {
-			return lab2;
-		}
-
-		public void setLab2(JLabel lab2) {
-			this.lab2 = lab2;
+			add(new JLabel(row));
+			add(txt2,"growx");
+			
 		}
 
 		public JTextField getTxt1() {
 			return txt1;
 		}
 
+
 		public void setTxt1(JTextField txt1) {
 			this.txt1 = txt1;
 		}
 
+
 		public JTextField getTxt2() {
 			return txt2;
 		}
+
 
 		public void setTxt2(JTextField txt2) {
 			this.txt2 = txt2;

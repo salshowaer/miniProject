@@ -1,3 +1,4 @@
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -12,27 +13,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+
 import net.miginfocom.swing.MigLayout;
 
 public class MultipleChoice extends JPanel {
 
 	
-	private JPanel panel, labelPanel, txtPanel;
-	private JScrollPane scrText, scrPanel;
-	private JTextField textField;;
-	private JLabel label;
+	private JPanel panel;
+	private JScrollPane scrPanel;
+	private JTextField txtTitle;
+	private TextArea txtBody;
+	private static PrintWriter out;
 
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private int i=0;
-	
-	public static PrintWriter out;
-
 	
 
 	public MultipleChoice() {
@@ -43,15 +42,14 @@ public class MultipleChoice extends JPanel {
 		JLabel lblTitle = new JLabel("Question Title (optional)");
 		add(lblTitle);
 		
-		textField = new JTextField();
-		add(textField, "span, growx, wrap");
+		txtTitle = new JTextField();
+		add(txtTitle, "span, growx, wrap");
 		
 		JLabel lblQuestion = new JLabel("Question");
 		add(lblQuestion, "alignx right,aligny top");
 		
-		JTextArea textArea = new JTextArea();
-		scrText = new JScrollPane(textArea);
-		add(scrText, "spanx, grow, wrap");
+		txtBody = new TextArea();
+		add(txtBody, "spanx, grow, wrap");
 		
 		JLabel lblAnswer = new JLabel("Choices");
 		add(lblAnswer);
@@ -109,33 +107,44 @@ public class MultipleChoice extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 									
 				try {
-						out = new PrintWriter(new BufferedWriter(new FileWriter(
-								"ExamQ.txt", true)));
+						out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
 								
-//						out.append("::" + qusetionTitle + "::" + qusetionQ + "{"
-//										+ "\n~%" + setzero(mark1) +"%"+ choise1 + "\n~%" +setzero(mark2) + "%"+ choise2 + "\n~%" + 
-//										setzero(mark3) + "%"+ choise3+ "\n~%" + 
-//										setzero(mark4) + "%"+ choise4+"\n}" + "\n");
+						out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + "{\n");
+						
+						for (int i = 0; i < rowList.size(); i++) {
+							
+							int value = (Integer)(rowList.get(i).getSpn().getValue());
+							
+							if(value > 0)
+								
+								out.append("~%" + rowList.get(i).getSpn().getValue() +"%" + rowList.get(i).getTxt().getText() + "\n");
+							else
+								out.append("~" + rowList.get(i).getTxt().getText() + "\n");
+
+						}
+						out.append("}\n");
 						out.close();
 								
-						rowList.get(i).getSpn().setValue(0);
 															
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-			
+					} catch (IOException e) {
+						e.printStackTrace();
+					
+					} finally {
+						
+						JOptionPane.showMessageDialog(null, "Question has been saved");
+						txtTitle.setText("");
+						txtBody.setText("");
+						
+						for (int i = 0; i < rowList.size(); i++) {
+														
+							rowList.get(i).getTxt().setText("");
+							rowList.get(i).getSpn().setValue(0);
 						}
+					}
 			
-						private String setzero(String mark) {
-							if(mark.compareTo("0")==0){
-								mark = "-100";
-								return mark;
-							}else
-								return mark;
-							
-							
-						}
-					});
+			}
+			
+		});
 	}
 	
 	
@@ -159,15 +168,21 @@ public class MultipleChoice extends JPanel {
 		
 		private SpinnerModel spnModel;
 		private JSpinner spn;
-		private JTextField txt = new JTextField();
+		private JTextField txt;
+		private String row;
 		
 		
-		public Row(String row){
+		public Row(String arow){
+			
+			super();
+			this.row = arow;
 			
 			setLayout(new MigLayout("", "[][grow][][]","[]"));
 			
 			spnModel = new SpinnerNumberModel(0, 0, 100, 5);
 			spn = new JSpinner(spnModel);
+			
+			txt = new JTextField();
 			
 			add(new JLabel(row));
 			add(txt,"growx");

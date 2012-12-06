@@ -1,28 +1,29 @@
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
 public class MissingWord extends JPanel {
 
-	private JPanel panel, labelPanel, txtPanel;
-	private JScrollPane scrText,scrPanel;
-	private JTextField textField;;
-	private JLabel label;
+	private JPanel panel;
+	private JScrollPane scrPanel;
+	private JTextField txtTitle;
+	private TextArea txtBody;
+	private static PrintWriter out;
 
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
@@ -37,15 +38,14 @@ public class MissingWord extends JPanel {
 		JLabel lblTitle = new JLabel("Question Title (optional)");
 		add(lblTitle);
 		
-		textField = new JTextField();
-		add(textField, "span, growx, wrap");
+		txtTitle = new JTextField();
+		add(txtTitle, "span, growx, wrap");
 		
 		JLabel lblQuestion = new JLabel("Question");
 		add(lblQuestion, "alignx right,aligny top");
 		
-		JTextArea textArea = new JTextArea();
-		scrText = new JScrollPane(textArea);
-		add(scrText, "spanx, grow, wrap");
+		txtBody = new TextArea();
+		add(txtBody, "spanx, grow, wrap");
 		
 		JLabel lblAnswer = new JLabel("Answer");
 		add(lblAnswer);
@@ -94,7 +94,48 @@ public class MissingWord extends JPanel {
 				else
 					JOptionPane.showMessageDialog(null, "You must have at least one Answer");				
 			}
-		});		
+		});	
+		
+		
+		saveAnswer.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+
+				try {
+					
+					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
+					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {");
+					
+					for (int i = 0; i < rowList.size()-1; i++) {
+						
+						out.append("=" + rowList.get(i).getTxt().getText() + " ");
+
+					}
+					out.append("=" + rowList.get(rowList.size()-1).getTxt().getText());
+					out.append("}\n");
+					out.close();	
+					
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					
+					} finally {
+						
+						JOptionPane.showMessageDialog(null, "Question has been saved");
+						txtTitle.setText("");
+						txtBody.setText("");
+						
+						for (int i = 0; i < rowList.size(); i++) {
+														
+							rowList.get(i).getTxt().setText("");
+						}
+					}
+
+				}
+			});
+
 	}
 	
 	
@@ -116,11 +157,17 @@ public class MissingWord extends JPanel {
 		
 	private class Row extends JPanel {
 		
-		private JTextField txt = new JTextField();
+		private JTextField txt;
+		private String row;
 		
-		public Row(String row){
+		public Row(String arow){
+			
+			super();
+			this.row = arow;
 			
 			setLayout(new MigLayout("", "[][grow]","[]"));
+			
+			txt = new JTextField();
 			
 			add(new JLabel(row));
 			add(txt,"growx");		

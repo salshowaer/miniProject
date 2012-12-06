@@ -1,6 +1,6 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -13,13 +13,16 @@ import javax.swing.JTabbedPane;
 		super("Easy Gift Format Question Editor"); 
 		JTabbedPane tab = new JTabbedPane();
 		
+		File gift = new File("Gift.txt");
+		gift.delete();
+		
 		tab.add("True/False",new TrueFalse());
 		tab.add("Multiple Choice", new MultipleChoice());
 		tab.add("Matching", new Matching());
 		tab.add("Missing Word", new MissingWord());
 		tab.add("Essay", new Essay());
 		tab.add("Numerical",new Numerical());
-		tab.add("Math Range",new MathRange());
+		tab.add("Number Range",new MathRange());
 		
 		add(tab);
 				

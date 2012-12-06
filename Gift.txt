@@ -1,0 +1,7 @@
+::Q7::
+choose animal.{
+~%40%cat
+~%45%rabit
+~chair
+~knife
+}

@@ -10,9 +10,9 @@ import net.miginfocom.swing.MigLayout;
 public class TrueFalse extends JPanel {
 
 	private JTextField txtTitle;
-	private JTextArea txtBody;
+	private TextArea txtBody;
 	private char answer;
-	public static PrintWriter out;
+	private static PrintWriter out;
 
 	public TrueFalse() {
 		
@@ -28,9 +28,8 @@ public class TrueFalse extends JPanel {
 		JLabel lblQuestion = new JLabel("Question");
 		add(lblQuestion, "alignx right,aligny top");
 		
-		txtBody = new JTextArea();
-		JScrollPane scrPane = new JScrollPane(txtBody);
-		add(scrPane, "grow, wrap");
+		txtBody = new TextArea();
+		add(txtBody, "grow, wrap");
 
 		JRadioButton rdbtnTrue = new JRadioButton("True");
 		JRadioButton rdbtnFalse = new JRadioButton("False");
@@ -62,16 +61,21 @@ public class TrueFalse extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String quesTitle = txtTitle.getText();
-				String quesBody = txtBody.getText();
 
 				try {
-					out = new PrintWriter(new BufferedWriter(new FileWriter("ExamQ.txt", true)));
 					
-					out.append("::" + quesTitle + "::" + quesBody + "{"+ answer + "}" + "\n");
+					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));					
+					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n");
 					out.close();
+										
 				} catch (IOException e) {
 					e.printStackTrace();
+				
+				} finally {
+					
+					JOptionPane.showMessageDialog(null, "Question has been saved");
+					txtTitle.setText("");
+					txtBody.setText("");
 				}
 
 			}
@@ -84,10 +88,11 @@ public class TrueFalse extends JPanel {
 	public class myAction implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			if (e.getActionCommand() == "True") {
+			
+			if (e.getActionCommand() == "True") 
 				answer = 'T';
-
-			} else
+			
+			else
 				answer = 'F';
 
 		}
