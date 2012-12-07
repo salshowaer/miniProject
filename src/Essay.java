@@ -1,27 +1,20 @@
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-
 
 public class Essay extends JPanel {
 	
 	private JTextField txtTitle;
 	private TextArea txtBody;
-	private static PrintWriter out;
+	private String content;
 	
 	public Essay() {
 
@@ -47,23 +40,20 @@ public class Essay extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
-				try {
-					
-					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));					
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {}" + "\n\n");
-					out.close();
-					
-				} catch (IOException e) {
-					e.printStackTrace();
 				
-				} finally {
+				if((txtTitle.getText().compareTo("")==0) | (txtBody.getText().compareTo("")==0))
+					JOptionPane.showMessageDialog(null, "Complete the question before save it");
+				
+				else{
 					
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {}" + "\n\n";
+					
+					StartingGUI.newSaveFile(content);
+							
 					JOptionPane.showMessageDialog(null, "Question has been saved");
 					txtTitle.setText("");
 					txtBody.setText("");
 				}
-
 			}
 		});
 		

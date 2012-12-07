@@ -1,13 +1,7 @@
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,19 +14,15 @@ import javax.swing.SpinnerNumberModel;
 import net.miginfocom.swing.MigLayout;
 
 public class NumberRange extends JPanel {
-
 	
 	private JPanel panel;
 	private JScrollPane scrPanel;
 	private JTextField txtTitle,answer;
 	private TextArea txtBody;
 	private JSpinner spnRange, spnMark;
-	private static PrintWriter out;
+	private String content;
 
-	
-
-	public NumberRange() {
-		
+	public NumberRange() {	
 		
 		setLayout(new MigLayout("", "[right][grow, center][]", "[][grow][][]"));
 		
@@ -78,31 +68,30 @@ public class NumberRange extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 									
-				try {
-						out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
+				if((txtTitle.getText().compareTo("")==0) 
+					| (txtBody.getText().compareTo("")==0) 
+					| (answer.getText().compareTo("")==0))
 								
-						out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() +
-									" {#\n=" + answer.getText() + ":0" +
-									"\n=%" + spnMark.getValue() + "%" + answer.getText() + ":" + spnRange.getValue());
+						JOptionPane.showMessageDialog(null, "Complete the question before save it");
+							
+				else{
 						
-						out.append("}\n\n");
-						out.close();
-								
-															
-					} catch (IOException e) {
-						e.printStackTrace();
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() +
+								" {#\n=" + answer.getText() + ":0" +
+								"\n=%" + spnMark.getValue() + "%" + answer.getText() + ":" + spnRange.getValue();
+						
+					content += "\n}\n\n";
 					
-					} finally {
+					StartingGUI.newSaveFile(content);
 						
-						JOptionPane.showMessageDialog(null, "Question has been saved");
-						txtTitle.setText("");
-						txtBody.setText("");
+					JOptionPane.showMessageDialog(null, "Question has been saved");
+					txtTitle.setText("");
+					txtBody.setText("");
 						
-						answer.setText("");
-						spnMark.setValue(0);
-						spnRange.setValue(0);
-					}
-			
+					answer.setText("");
+					spnMark.setValue(0);
+					spnRange.setValue(0);
+				}			
 			}
 			
 		});		

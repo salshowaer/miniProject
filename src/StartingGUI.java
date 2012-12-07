@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -12,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-
 
 	public class StartingGUI {
 		
@@ -24,6 +22,7 @@ import javax.swing.JTabbedPane;
 	    static String content;
 	    static PrintWriter out;
 	    static JFrame frame;
+	    private JTabbedPane tab;
 		
 	    public StartingGUI(){
 	    	
@@ -48,7 +47,7 @@ import javax.swing.JTabbedPane;
     	menu.add(file);
     	frame.setJMenuBar(menu);
 				
-		JTabbedPane tab = new JTabbedPane();
+		tab = new JTabbedPane();
 		tab.add("True/False",new TrueFalse());
 		tab.add("Multiple Choice",new MultipleChoice());
 		tab.add("Multiple Answer", new MultipleAnswer());
@@ -69,13 +68,19 @@ import javax.swing.JTabbedPane;
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				int message = JOptionPane.showConfirmDialog(null, "Did you save your questions before leaving?", "Leaving current file",
+				int message = 0;				
+				
+				if(currentFile!=null){
+					message = JOptionPane.showConfirmDialog(null, "Have you saved your questions before leaving?", "Leaving current file",
 				        JOptionPane.YES_NO_OPTION);
 				
-				if (message == JOptionPane.YES_OPTION){
-					currentFile=null;
-					newSaveFile("");				
+					if (message == JOptionPane.YES_OPTION){
+						currentFile=null;
+						newSaveFile("");
+					}
 				}
+				else
+					newSaveFile("");
 			}
 		});
     	
@@ -109,23 +114,25 @@ import javax.swing.JTabbedPane;
 		private void openFile(){
 	    	
 	    	int openResult = findFile.showOpenDialog(null);
-			if(openResult == JFileChooser.APPROVE_OPTION)
+			
+	    	if(openResult == JFileChooser.APPROVE_OPTION){
 				afile = findFile.getSelectedFile();
 	    	
-	    	if(afile.canRead()){
-	    		String filePath = afile.getPath();
-	    		
-	    		if(filePath.endsWith(".txt")){
-	    			currentFile = afile;
-	    			frame.setTitle("Gift Text Editor - " + filePath);
-	    		}
-	    		else{
-	    			JOptionPane.showMessageDialog(null, "Only .txt files");
-	    		}
-	    	}
-	    	else{
-	    		JOptionPane.showMessageDialog(null, "Error loading file!");
-	    	}
+		    	if(afile.canRead()){
+		    		String filePath = afile.getPath();
+		    		
+		    		if(filePath.endsWith(".txt")){
+		    			currentFile = afile;
+		    			frame.setTitle("Gift Text Editor - " + filePath);
+		    		}
+		    		else{
+		    			JOptionPane.showMessageDialog(null, "Only .txt files");
+		    		}
+		    	}
+		    	else{
+		    		JOptionPane.showMessageDialog(null, "Error loading file!");
+		    	}
+			}
 	    }
 		
 	    public static void newSaveFile(String content){

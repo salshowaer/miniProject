@@ -1,18 +1,12 @@
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
@@ -23,14 +17,13 @@ public class MissingWord extends JPanel {
 	private JScrollPane scrPanel;
 	private JTextField txtTitle;
 	private TextArea txtBody;
-	private static PrintWriter out;
+	private String content;
 
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	int i=0;
 
-	
 	public MissingWord() {
 
 		setLayout(new MigLayout("", "[right][grow,fill][grow,fill]", "[][grow][][]"));
@@ -101,40 +94,37 @@ public class MissingWord extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
+				if((txtTitle.getText().compareTo("")==0) 
+					| (txtBody.getText().compareTo("")==0) 
+					| (rowList.get(0).getTxt().getText().compareTo("")==0))
+								
+					JOptionPane.showMessageDialog(null, "Complete the question before save it");
+							
+				else{
 
-
-				try {
-					
-					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {");
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {";
 					
 					for (int i = 0; i < rowList.size()-1; i++) {
 						
-						out.append("=" + rowList.get(i).getTxt().getText() + " ");
-
+						content += "=" + rowList.get(i).getTxt().getText() + " ";
 					}
-					out.append("=" + rowList.get(rowList.size()-1).getTxt().getText());
-					out.append("}\n\n");
-					out.close();	
 					
-
-					} catch (IOException e) {
-						e.printStackTrace();
+					content += "=" + rowList.get(rowList.size()-1).getTxt().getText();
+					content += "}\n\n";
 					
-					} finally {
+					StartingGUI.newSaveFile(content);
 						
-						JOptionPane.showMessageDialog(null, "Question has been saved");
-						txtTitle.setText("");
-						txtBody.setText("");
+					JOptionPane.showMessageDialog(null, "Question has been saved");
+					txtTitle.setText("");
+					txtBody.setText("");
 						
-						for (int i = 0; i < rowList.size(); i++) {
-														
-							rowList.get(i).getTxt().setText("");
-						}
+					for (int i = 0; i < rowList.size(); i++) {								
+						rowList.get(i).getTxt().setText("");
 					}
-
 				}
-			});
+			}
+		});
 
 	}
 	
@@ -151,8 +141,8 @@ public class MissingWord extends JPanel {
 	
 	private void delAnswer(int i) {
 		
-		panel.remove(rowList.get(i));			
-
+		panel.remove(rowList.get(i));
+		rowList.remove(i);			
 	}
 		
 	private class Row extends JPanel {

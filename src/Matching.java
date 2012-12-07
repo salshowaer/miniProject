@@ -1,22 +1,15 @@
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-
 
 public class Matching extends JPanel {
 	
@@ -24,13 +17,12 @@ public class Matching extends JPanel {
 	private JScrollPane scrPanel;
 	private JTextField txtTitle;
 	private TextArea txtBody;
-	private static PrintWriter out;
-
+	private String content;
+	
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	int i=0;
-	
 
 	public Matching() {
 		
@@ -100,40 +92,37 @@ public class Matching extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
-
-				try {
+				if((txtTitle.getText().compareTo("")==0) 
+					| (txtBody.getText().compareTo("")==0) 
+					| (rowList.get(0).getTxt1().getText().compareTo("")==0)
+					| (rowList.get(0).getTxt2().getText().compareTo("")==0))
+							
+						JOptionPane.showMessageDialog(null, "Complete the question before save it");
+						
+				else{
 					
-					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {\n");
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + "{\n";
 					
 					for (int i = 0; i < rowList.size(); i++) {
 						
-						out.append("=" + rowList.get(i).getTxt1().getText() + " -> " + rowList.get(i).getTxt2().getText() + "\n");
-
+						content += "=" + rowList.get(i).getTxt1().getText() + " -> " + rowList.get(i).getTxt2().getText() + "\n";
 					}
 					
-					out.append("}\n\n");
-					out.close();	
+					content += "}\n\n";
 					
+					StartingGUI.newSaveFile(content);
 
-					} catch (IOException e) {
-						e.printStackTrace();
-					
-					} finally {
+					JOptionPane.showMessageDialog(null, "Question has been saved");
+					txtTitle.setText("");
+					txtBody.setText("");
 						
-						JOptionPane.showMessageDialog(null, "Question has been saved");
-						txtTitle.setText("");
-						txtBody.setText("");
-						
-						for (int i = 0; i < rowList.size(); i++) {
-														
-							rowList.get(i).getTxt1().setText("");
-							rowList.get(i).getTxt2().setText("");
-						}
+					for (int i = 0; i < rowList.size(); i++) {								
+						rowList.get(i).getTxt1().setText("");
+						rowList.get(i).getTxt2().setText("");
 					}
-
 				}
-			});
+			}
+		});
 	}
 
 
@@ -150,7 +139,7 @@ public class Matching extends JPanel {
 	protected void removeMatch(int i) {
 				
 		panel.remove(rowList.get(i));
-	
+		rowList.remove(i);
 	}
 
 	private class Row extends JPanel {

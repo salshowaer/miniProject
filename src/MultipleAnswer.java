@@ -1,12 +1,7 @@
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,20 +15,18 @@ import javax.swing.SpinnerNumberModel;
 import net.miginfocom.swing.MigLayout;
 
 public class MultipleAnswer extends JPanel {
-
 	
 	private JPanel panel;
 	private JScrollPane scrPanel;
 	private JTextField txtTitle;
 	private TextArea txtBody;
-	private static PrintWriter out;
+	private String content;
 
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private int i=0;
 	
-
 	public MultipleAnswer() {
 		
 		
@@ -106,42 +99,40 @@ public class MultipleAnswer extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 									
-				try {
-						out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
+				if((txtTitle.getText().compareTo("")==0) 
+					| (txtBody.getText().compareTo("")==0) 
+					| (rowList.get(0).getTxt().getText().compareTo("")==0))
 								
-						out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + "{\n");
+						JOptionPane.showMessageDialog(null, "Complete the question before save it");
+							
+				else{
 						
-						for (int i = 0; i < rowList.size(); i++) {
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + "{\n";
+						
+					for (int i = 0; i < rowList.size(); i++) {
 							
-							int value = (Integer)(rowList.get(i).getSpn().getValue());
+						int value = (Integer)(rowList.get(i).getSpn().getValue());
 							
-							if(value > 0)
-								
-								out.append("~%" + rowList.get(i).getSpn().getValue() +"%" + rowList.get(i).getTxt().getText() + "\n");
-							else
-								out.append("~" + rowList.get(i).getTxt().getText() + "\n");
+						if(value > 0)	
+							content += "~%" + rowList.get(i).getSpn().getValue() +"%" + rowList.get(i).getTxt().getText() + "\n";
+						else
+							content += "~" + rowList.get(i).getTxt().getText() + "\n";
 
-						}
-						out.append("}\n\n");
-						out.close();
-								
-															
-					} catch (IOException e) {
-						e.printStackTrace();
+					}
 					
-					} finally {
+					content += "}\n\n";
+								
+					StartingGUI.newSaveFile(content);
+					
+					JOptionPane.showMessageDialog(null, "Question has been saved");
+					txtTitle.setText("");
+					txtBody.setText("");
 						
-						JOptionPane.showMessageDialog(null, "Question has been saved");
-						txtTitle.setText("");
-						txtBody.setText("");
-						
-						for (int i = 0; i < rowList.size(); i++) {
-														
+					for (int i = 0; i < rowList.size(); i++) {									
 							rowList.get(i).getTxt().setText("");
 							rowList.get(i).getSpn().setValue(0);
-						}
 					}
-			
+				}
 			}
 			
 		});
@@ -160,8 +151,8 @@ public class MultipleAnswer extends JPanel {
 	
 	private void delAnswer(int i) {
 		
-		panel.remove(rowList.get(i));			
-
+		panel.remove(rowList.get(i));
+		rowList.remove(i);
 	}
 		
 	private class Row extends JPanel {

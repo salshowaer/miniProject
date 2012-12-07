@@ -1,8 +1,6 @@
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
@@ -12,14 +10,12 @@ public class TrueFalse extends JPanel {
 	private JTextField txtTitle;
 	private TextArea txtBody;
 	private char answer = ' ';
-	private static PrintWriter out;
 	private ButtonGroup btnGroup;
 	private JRadioButton rdbtnTrue, rdbtnFalse;
-	static String TrueFalse_String;
+	private String content;
 
 	public TrueFalse() {
-		
-		
+			
 		setLayout(new MigLayout("", "[right][grow]", "[][grow][][]"));
 
 		JLabel lblTitle = new JLabel("Question Title (optional)");
@@ -70,15 +66,15 @@ public class TrueFalse extends JPanel {
 				
 				else{
 					
-					TrueFalse_String = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n\n";
-					StartingGUI.newSaveFile(TrueFalse_String);
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n\n";
+					
+					StartingGUI.newSaveFile(content);
 															
 					JOptionPane.showMessageDialog(null, "Question has been saved");
 					txtTitle.setText("");
 					txtBody.setText("");
 					btnGroup.clearSelection();
 					answer = ' ';
-
 				}
 			}
 		});

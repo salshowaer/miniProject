@@ -1,37 +1,28 @@
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
 
 import net.miginfocom.swing.MigLayout;
 
 public class MultipleChoice extends JPanel {
-
 	
 	private JPanel panel;
 	private JScrollPane scrPanel;
 	private JTextField txtTitle;
 	private TextArea txtBody;
-	private static PrintWriter out;
+	private String content;
 	
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private int i=0;
-	
 
 	public MultipleChoice() {
 		
@@ -104,33 +95,32 @@ public class MultipleChoice extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-									
-				try {
-					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
-							
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + "\n" +
-							"{=" + rowList.get(0).getTxt1().getText() + " #" + rowList.get(0).getTxt2().getText());
-					
-					for (int i = 1; i < rowList.size(); i++) {
-						
-						out.append(" ~" + rowList.get(i).getTxt1().getText() +" #" +  rowList.get(i).getTxt2().getText());
-						
-					}
-					out.append("}\n\n");
-					out.close();
-							
-														
-				} catch (IOException e) {
-					e.printStackTrace();
 				
-				} finally {
+				if((txtTitle.getText().compareTo("")==0) 
+					| (txtBody.getText().compareTo("")==0) 
+					| (rowList.get(0).getTxt1().getText().compareTo("")==0))
+						
+					JOptionPane.showMessageDialog(null, "Complete the question before save it");
+					
+				else{	
+					
+					content = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + "\n" + 
+								"{=" + rowList.get(0).getTxt1().getText() + " #" + rowList.get(0).getTxt2().getText();
+						
+					for (int i = 1; i < rowList.size(); i++) {
+							
+						content += " ~" + rowList.get(i).getTxt1().getText() + " #" +  rowList.get(i).getTxt2().getText();		
+					}
+					
+					content += "}\n\n";
+											
+					StartingGUI.newSaveFile(content);
 					
 					JOptionPane.showMessageDialog(null, "Question has been saved");
 					txtTitle.setText("");
 					txtBody.setText("");
 					
-					for (int i = 0; i < rowList.size(); i++) {
-													
+					for (int i = 0; i < rowList.size(); i++) {								
 						rowList.get(i).getTxt1().setText("");
 						rowList.get(i).getTxt2().setText("");
 					}
@@ -152,14 +142,12 @@ public class MultipleChoice extends JPanel {
 	
 	private void delAnswer(int i) {
 		
-		panel.remove(rowList.get(i));			
-
+		panel.remove(rowList.get(i));
+		rowList.remove(i);
 	}
 		
 	private class Row extends JPanel {
 		
-		private SpinnerModel spn1Model, spn2Model;
-		private JSpinner spn1,spn2;
 		private JTextField txt1,txt2;
 		
 		

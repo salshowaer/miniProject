@@ -1,13 +1,11 @@
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -28,22 +26,14 @@ public class FileGallery extends JFrame {
     private JScrollPane scroll;
     private JFileChooser findFile;
     private File afile;
-  
+    private boolean chk = true;
   
     public FileGallery() { 
     
     	setTitle("Gift Text Editor - New File");  
-    	setResizable(false);
-    	setLayout(null);
     	
     	findFile = new JFileChooser();
-    	
-    	panel = new JPanel();
-    	Dimension panelSize = new Dimension(600,400);
-    	panel.setPreferredSize(panelSize);	
-    	panel.setBackground(Color.black);
-    	setContentPane(panel);
-    	
+   	
     	menu = new JMenuBar();	
     	file = new JMenu("File");	
     	open = new JMenuItem("Open");
@@ -52,26 +42,29 @@ public class FileGallery extends JFrame {
     	file.add(open);
     	file.add(exit);
     	
-    	textZone = new JTextArea(25,54);
-    	textZone.setEditable(false);
-    	Dimension tZSize = textZone.getPreferredSize();
-    	textZone.setBounds(3,0,tZSize.width,tZSize.height);
-    	textZone.setLineWrap(true);
-    	textZone.setWrapStyleWord(true);
-    	scroll = new JScrollPane(textZone);
-    	panel.add(scroll);
-    	
     	menu.add(file);
     	setJMenuBar(menu);
     	
-    	Toolkit toolkit = getToolkit();
-		Dimension dimension = toolkit.getScreenSize();
-    	setBounds(400, 100, dimension.width - 200, dimension.height - 100);
+    	panel = new JPanel();
+    	panel.setBackground(Color.black);
+    	textZone = new JTextArea(27,50);
+    	textZone.setEditable(false);
+
+    	textZone.setLineWrap(true);
+    	textZone.setWrapStyleWord(true);
+    	scroll = new JScrollPane(textZone);
+    	
+    	panel.add(scroll);
+    	add(panel);
     	
     	openFile();
+    		    	    	
+    	setSize(600,500);
+    	setResizable(false);
+    	setLocationRelativeTo(null);
     	
-    	pack();
-    	setVisible(true);
+    	if(chk)
+    		setVisible(true);
     	
     	
     	open.addActionListener(new ActionListener() {	
@@ -95,34 +88,40 @@ public class FileGallery extends JFrame {
     
     private void openFile(){
     	
+    	Font font = new Font("Aria", Font.BOLD, 12);
+		textZone.setFont(font);
+		
     	int openResult = findFile.showOpenDialog(null);
-		if(openResult == JFileChooser.APPROVE_OPTION)
-			afile = findFile.getSelectedFile();
     	
-    	if(afile.canRead()){
-    		String filePath = afile.getPath();
-    		String fileContents = "";
-    		
-    		if(filePath.endsWith(".txt")){
-    			
-    			try {
+		if(openResult == JFileChooser.APPROVE_OPTION){
+			afile = findFile.getSelectedFile();
+			textZone.setText("");
+    	
+	    	if(afile.canRead()){
+	    		String filePath = afile.getPath();
+	    		
+	    		if(filePath.endsWith(".txt")){
+	    			
+	    			try {
+	    				setTitle("Gift Text Editor - " + filePath);
+	    				Scanner scan = new Scanner(new FileInputStream(afile));
+	    				while(scan.hasNextLine()){
+	    					textZone.append(scan.nextLine() + "\n");
+	    				}
+	    				scan.close();
 					
-    				setTitle("Gift Text Editor - " + filePath);
-    				Scanner scan = new Scanner(new FileInputStream(afile));
-    				while(scan.hasNextLine()){
-    					textZone.append(scan.nextLine() + "\n");
-    				}
-    				scan.close();
-				
-    			} catch (FileNotFoundException e) {}
-    		}
-    		else{
-    			JOptionPane.showMessageDialog(null, "Only .txt files");
-    		}
+	    			} catch (FileNotFoundException e) {}
+	    		}
+	    		else{
+	    			JOptionPane.showMessageDialog(null, "Only .txt files");
+	    		}
+	    	}
+	    	else{
+	    		JOptionPane.showMessageDialog(null, "Error loading file!");
+	    	}
     	}
-    	else{
-    		JOptionPane.showMessageDialog(null, "Error loading file!");
-    	}
+    	else
+    		chk = false;
     }
   
 }  
