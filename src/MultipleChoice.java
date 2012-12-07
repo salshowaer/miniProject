@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -27,7 +26,7 @@ public class MultipleChoice extends JPanel {
 	private JTextField txtTitle;
 	private TextArea txtBody;
 	private static PrintWriter out;
-
+	
 	private ArrayList<Row> rowList = new ArrayList<Row>();
 	private String [] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 			 			 "N", "O","P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
@@ -107,43 +106,36 @@ public class MultipleChoice extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 									
 				try {
-						out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
-								
-						out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + "{\n");
-						
-						for (int i = 0; i < rowList.size(); i++) {
+					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));
 							
-							int value = (Integer)(rowList.get(i).getSpn().getValue());
-							
-							if(value > 0)
-								
-								out.append("~%" + rowList.get(i).getSpn().getValue() +"%" + rowList.get(i).getTxt().getText() + "\n");
-							else
-								out.append("~" + rowList.get(i).getTxt().getText() + "\n");
-
-						}
-						out.append("}\n\n");
-						out.close();
-								
-															
-					} catch (IOException e) {
-						e.printStackTrace();
+					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + "\n" +
+							"{=" + rowList.get(0).getTxt1().getText() + " #" + rowList.get(0).getTxt2().getText());
 					
-					} finally {
+					for (int i = 1; i < rowList.size(); i++) {
 						
-						JOptionPane.showMessageDialog(null, "Question has been saved");
-						txtTitle.setText("");
-						txtBody.setText("");
+						out.append(" ~" + rowList.get(i).getTxt1().getText() +" #" +  rowList.get(i).getTxt2().getText());
 						
-						for (int i = 0; i < rowList.size(); i++) {
-														
-							rowList.get(i).getTxt().setText("");
-							rowList.get(i).getSpn().setValue(0);
-						}
 					}
-			
-			}
-			
+					out.append("}\n\n");
+					out.close();
+							
+														
+				} catch (IOException e) {
+					e.printStackTrace();
+				
+				} finally {
+					
+					JOptionPane.showMessageDialog(null, "Question has been saved");
+					txtTitle.setText("");
+					txtBody.setText("");
+					
+					for (int i = 0; i < rowList.size(); i++) {
+													
+						rowList.get(i).getTxt1().setText("");
+						rowList.get(i).getTxt2().setText("");
+					}
+				}
+			}			
 		});
 	}
 	
@@ -166,46 +158,46 @@ public class MultipleChoice extends JPanel {
 		
 	private class Row extends JPanel {
 		
-		private SpinnerModel spnModel;
-		private JSpinner spn;
-		private JTextField txt;
-		private String row;
+		private SpinnerModel spn1Model, spn2Model;
+		private JSpinner spn1,spn2;
+		private JTextField txt1,txt2;
 		
 		
-		public Row(String arow){
+		public Row(String row){
+					
+			txt1 = new JTextField();
+			txt2 = new JTextField();
 			
-			super();
-			this.row = arow;
-			
-			setLayout(new MigLayout("", "[][grow][][]","[]"));
-			
-			spnModel = new SpinnerNumberModel(0, 0, 100, 5);
-			spn = new JSpinner(spnModel);
-			
-			txt = new JTextField();
+			setLayout(new MigLayout("", "[][grow][][grow]","[]"));
 			
 			add(new JLabel(row));
-			add(txt,"growx");
-			add(new JLabel("%"));
-			add(spn,"growx");
+			add(txt1,"growx");
+			
+			add(new JLabel("Feedback (Optional)"));
+			add(txt2,"growx");
 			
 		}
 
-		public JTextField getTxt() {
-			return txt;
+
+		public JTextField getTxt1() {
+			return txt1;
 		}
 
-		public void setTxt(JTextField txt) {
-			this.txt = txt;
+
+		public void setTxt1(JTextField txt1) {
+			this.txt1 = txt1;
 		}
 
-		public JSpinner getSpn() {
-			return spn;
+
+		public JTextField getTxt2() {
+			return txt2;
 		}
 
-		public void setSpn(JSpinner spn) {
-			this.spn = spn;
+
+		public void setTxt2(JTextField txt2) {
+			this.txt2 = txt2;
 		}
+			
 	}
 
 }

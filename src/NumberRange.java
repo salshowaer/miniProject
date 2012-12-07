@@ -61,16 +61,16 @@ public class NumberRange extends JPanel {
 			
 		panel.add(new JLabel("Answer"));
 		panel.add(answer);
+				
+		panel.add(new JLabel("Range +/-"));
+		SpinnerModel spnModel1 = new SpinnerNumberModel(0, 0, 100, 1);
+		spnRange = new JSpinner(spnModel1);
+		panel.add(spnRange);
 		
 		panel.add(new JLabel("Mark %"));
 		SpinnerModel spnModel2 = new SpinnerNumberModel(0, 0, 100, 5);
 		spnMark = new JSpinner(spnModel2);
 		panel.add(spnMark);
-		
-		panel.add(new JLabel("Range +/-"));
-		SpinnerModel spnModel1 = new SpinnerNumberModel(0, 0, 100, 1);
-		spnRange = new JSpinner(spnModel1);
-		panel.add(spnRange);
 	
 		
 		saveAnswer.addActionListener(new ActionListener() {

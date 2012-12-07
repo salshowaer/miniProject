@@ -11,8 +11,11 @@ public class TrueFalse extends JPanel {
 
 	private JTextField txtTitle;
 	private TextArea txtBody;
-	private char answer;
+	private char answer = ' ';
 	private static PrintWriter out;
+	private ButtonGroup btnGroup;
+	private JRadioButton rdbtnTrue, rdbtnFalse;
+	static String TrueFalse_String;
 
 	public TrueFalse() {
 		
@@ -31,13 +34,13 @@ public class TrueFalse extends JPanel {
 		txtBody = new TextArea();
 		add(txtBody, "grow, wrap");
 
-		JRadioButton rdbtnTrue = new JRadioButton("True");
-		JRadioButton rdbtnFalse = new JRadioButton("False");
-		
-		ButtonGroup btnGroup = new ButtonGroup();
+		rdbtnTrue = new JRadioButton("True");
+		rdbtnFalse = new JRadioButton("False");
+				
+		btnGroup = new ButtonGroup();
 		btnGroup.add(rdbtnTrue);
 		btnGroup.add(rdbtnFalse);
-		
+				
 		rdbtnTrue.addActionListener(new myAction());
 		rdbtnFalse.addActionListener(new myAction());
 
@@ -56,33 +59,29 @@ public class TrueFalse extends JPanel {
 		JButton saveAnswer = new JButton("Save & Add Question");
 		add(saveAnswer, "aligny bottom");
 
-		
+			
 		saveAnswer.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
-				try {
-					
-					out = new PrintWriter(new BufferedWriter(new FileWriter("Gift.txt", true)));					
-					out.append("::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n\n");
-					out.close();
-										
-				} catch (IOException e) {
-					e.printStackTrace();
 				
-				} finally {
+				if((txtTitle.getText().compareTo("")==0) | (txtBody.getText().compareTo("")==0) | (answer!='T' & answer!='F'))
+					JOptionPane.showMessageDialog(null, "Complete the question before save it");
+				
+				else{
 					
+					TrueFalse_String = "::" + txtTitle.getText() + "::\n" + txtBody.getText() + " {" + answer + "}\n\n";
+					StartingGUI.newSaveFile(TrueFalse_String);
+															
 					JOptionPane.showMessageDialog(null, "Question has been saved");
 					txtTitle.setText("");
 					txtBody.setText("");
-				}
+					btnGroup.clearSelection();
+					answer = ' ';
 
+				}
 			}
 		});
-
-		
-
 	}
 
 	public class myAction implements ActionListener {
@@ -97,6 +96,6 @@ public class TrueFalse extends JPanel {
 
 		}
 
-	}
+	}	
 
 }

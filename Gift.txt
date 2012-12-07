@@ -1,5 +1,0 @@
-::Q9::
-What year was UCLA founded in?{#
-=1919:0
-=%50%1919:2}
-
