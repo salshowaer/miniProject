@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
   
-public class FileGallery extends JFrame {  
+public class FilePreview extends JFrame {  
   
     private JPanel panel; 
     private JMenuBar menu;
@@ -28,7 +28,7 @@ public class FileGallery extends JFrame {
     private File afile;
     private boolean chk = true;
   
-    public FileGallery() { 
+    public FilePreview() { 
     
     	setTitle("Gift Text Editor - New File");  
     	
@@ -56,12 +56,16 @@ public class FileGallery extends JFrame {
     	
     	panel.add(scroll);
     	add(panel);
-    	
-    	openFile();
-    		    	    	
+    	    		    	    	
     	setSize(600,500);
     	setResizable(false);
     	setLocationRelativeTo(null);
+    	
+    	if(StartingGUI.preview==0)
+    		previewCurrentFile();
+    	
+    	if(StartingGUI.preview==1)
+    		previewAnotherFile();
     	
     	if(chk)
     		setVisible(true);
@@ -71,7 +75,7 @@ public class FileGallery extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				openFile();		
+				previewAnotherFile();		
 			}
 		});
     	
@@ -86,7 +90,34 @@ public class FileGallery extends JFrame {
         
     }  
     
-    private void openFile(){
+    private void previewCurrentFile(){
+    	
+    	Font font = new Font("Aria", Font.BOLD, 12);
+		textZone.setFont(font);
+		
+		afile = StartingGUI.currentFile;
+		    	
+	    if(afile!=null){
+	    	String filePath = afile.getPath();
+	    			
+	    	try {
+	    		setTitle("Gift Text Editor - " + filePath);
+	    		Scanner scan = new Scanner(new FileInputStream(afile));
+	    		while(scan.hasNextLine()){
+	    			textZone.append(scan.nextLine() + "\n");
+	    		}
+	    		scan.close();
+				
+	    	} catch (FileNotFoundException e) {}
+	    }
+	    else{
+	    	JOptionPane.showMessageDialog(null, "No question saved to preview");
+	    	chk = false;
+	    }
+    }
+    
+    
+    private void previewAnotherFile(){
     	
     	Font font = new Font("Aria", Font.BOLD, 12);
 		textZone.setFont(font);

@@ -1,13 +1,17 @@
+import java.awt.Color;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -46,6 +50,9 @@ public class MultipleChoice extends JPanel {
 		
 		panel = new JPanel();
 		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel.setBorder(BorderFactory.createLineBorder(Color.black));
+		TitledBorder title = BorderFactory.createTitledBorder("The first field should be the Correct answer");
+		panel.setBorder(title);
 		
 		scrPanel = new JScrollPane(panel);
 		add(scrPanel,"spanx, grow, wrap");
@@ -131,7 +138,7 @@ public class MultipleChoice extends JPanel {
 	
 	
 	private void addAnswer(int i) {
-		
+				
 		rowList.add(new Row(letters[i]));
 		
 		for (int x = 0; x <= i; x++) {
@@ -150,20 +157,18 @@ public class MultipleChoice extends JPanel {
 		
 		private JTextField txt1,txt2;
 		
-		
 		public Row(String row){
 					
 			txt1 = new JTextField();
 			txt2 = new JTextField();
-			
+						
 			setLayout(new MigLayout("", "[][grow][][grow]","[]"));
 			
 			add(new JLabel(row));
 			add(txt1,"growx");
 			
 			add(new JLabel("Feedback (Optional)"));
-			add(txt2,"growx");
-			
+			add(txt2,"growx");	
 		}
 
 
