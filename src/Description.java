@@ -10,17 +10,17 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-public class Essay extends JPanel {
+public class Description extends JPanel {
 	
 	private JTextField txtTitle;
 	private TextArea txtBody;
 	private String content;
 	
-	public Essay() {
+	public Description() {
 
 		setLayout(new MigLayout("", "[right][grow,fill]", "[][grow][]"));
 		
-		JLabel lblTitle = new JLabel("Question Title (optional)");
+		JLabel lblTitle = new JLabel("Exam Title (optional)");
 		add(lblTitle);
 		
 		txtTitle = new JTextField();

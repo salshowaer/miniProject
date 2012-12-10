@@ -64,9 +64,10 @@ import javax.swing.JToolBar;
 		tab.add("Multiple Choice"	, new MultipleChoice());
 		tab.add("Multiple Answer"	, new MultipleAnswer());
 		tab.add("Matching"			, new Matching());
-		tab.add("Missing Word"		, new MissingWord());
-		tab.add("Number Range"		, new NumberRange());
+		tab.add("Short Answer"		, new ShortAnswer());
+		tab.add("Numerical"		, new Numerical());
 		tab.add("Essay"				, new Essay());
+		tab.add("Description"		, new Description());
 		
 		JPanel panel = new JPanel();
 		panel.add(toolBar, BorderLayout.CENTER);

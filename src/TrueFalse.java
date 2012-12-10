@@ -50,7 +50,23 @@ public class TrueFalse extends JPanel {
 		radioPanelGroup.add(rdbtnTrue);
 		radioPanelGroup.add(rdbtnFalse);
 		
-		add(radioPanelGroup, "skip 1, alignx left, aligny top, wrap");
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				txtTitle.setText("");
+				txtBody.setText("");
+					
+				txtTitle.setText("");
+				txtBody.setText("");
+				btnGroup.clearSelection();
+				answer = ' ';
+				
+			}
+		});
+		add(btnClear, "cell 0 2,growx");
+		
+		add(radioPanelGroup, "alignx center, aligny top, wrap");
 		
 		JButton saveAnswer = new JButton("Save & Add Question");
 		add(saveAnswer, "aligny bottom");

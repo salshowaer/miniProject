@@ -44,8 +44,23 @@ public class MultipleAnswer extends JPanel {
 		txtBody = new TextArea();
 		add(txtBody, "spanx, grow, wrap");
 		
-		JLabel lblAnswer = new JLabel("Choices");
-		add(lblAnswer);
+//		JLabel lblAnswer = new JLabel("Choices");
+//		add(lblAnswer);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				txtTitle.setText("");
+				txtBody.setText("");
+					
+				for (int i = 0; i < rowList.size(); i++) {								
+					rowList.get(i).getTxt().setText("");
+				}
+				
+			}
+		});
+		add(btnClear, "cell 0 2,growx");
 		
 		panel = new JPanel();
 		panel.setLayout(new MigLayout("", "[grow]", "[]"));
@@ -56,6 +71,8 @@ public class MultipleAnswer extends JPanel {
 		rowList.add(new Row(letters[i]));
 		
 		panel.add(rowList.get(i),"growx, wrap");
+		
+
 	
 		JButton saveAnswer = new JButton("Save & Add Question");
 		add(saveAnswer);
